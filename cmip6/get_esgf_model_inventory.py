@@ -25,29 +25,56 @@ ocean_variables = [
 ]
 
 
-def main():
+def get_inventory(context, verbose=False):
+    '''
+    Generates an inventory of CMIP6 data
 
+    :context: dict of search terms
+    
+    :returns: dict repr of json data structure
+
+    Example
+    -------
+    context = {'experiment_id': 'historical', 'variable': ['siconc', 'sivol'], 'frequency': 'mon'}
+    table = get_inventory(context)
+    '''
     conn = SearchConnection('https://esgf-data.dkrz.de/esg-search', distrib=True)
     ctx = conn.new_context(project='CMIP6',
                            experiment_id='historical',
                            variable=['siconc', 'sivol'],
                            frequency='mon')
-
-    # For testing
-    print(f'# Ensembles: {ctx.hit_count}')
-    result = ctx.search()
-    for r in result:
-        print(r.dataset_id)
-        
-    return
+    if verbose:
+        print(f'# Hits: {ctx.hit_count}')
 
     data = {}  # initialize dict
-    data['ensembles'] = [r.json for r in ctx.search()]
+    if ctx.hit_count > 0:
+        data['ensembles'] = [r.json for r in ctx.search()]
 
-    with open('model.txt', 'w') as outfile:
-        json.dump(data, outfile)
+    return data
+
+
+def write_inventory(data, outfile):
+    '''
+    Writes inventory to JSON file
+
+    :data: dict from json structure
+    :outfile: filepath for outfile
+    '''
+    with open(outfile, 'w') as fo:
+        json.dump(data, fo)
+
+        
+def main():
+
+    context = {}
+
+    result = get_inventory(context, verbose=True)
+    write_inventory(result, 'seaice_list.txt')
     
-
+    # For testing
+#    for r in result:
+#        print(r['dataset_id'])
+        
     return
 
     
