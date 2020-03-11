@@ -22,17 +22,9 @@ def file_first_year(f):
 
 def make_dataframe(catalog):
     '''Builds a pandas DataFrame'''
-    return
-
-
-def siextentn_to_csv():
-    '''Makes a pandas DataFrame of 1D data'''
-
     warnings.simplefilter("ignore")  # Brute force way to ignore RuntimeWarning
                                      # about converting from noleap calendar
 
-    catalog = munge.generate_catalog(VARIABLE, TABLE, EXPERIMENT, MEMBER, datadir=DATADIR)
-    
     series = []
     for model, modelfiles in catalog.items():
         modelfiles = [f for f in modelfiles if file_first_year(f) < 2100]
@@ -45,6 +37,14 @@ def siextentn_to_csv():
     warnings.simplefilter("default")  # Turn warnings back on
 
     df = pd.concat(series, axis=1)
+    return df
+
+
+def siextentn_to_csv():
+    '''Makes a pandas DataFrame of 1D data'''
+
+    catalog = munge.generate_catalog(VARIABLE, TABLE, EXPERIMENT, MEMBER, datadir=DATADIR)
+    df = make_dataframe(catalog)
     print(df.head())
 
 #df.to_csv(os.path.join(DATADIR, 'siextentn', 'SImon', 'siextentn.SImon.CMIP6.historical.csv'))
