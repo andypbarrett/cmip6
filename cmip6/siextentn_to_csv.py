@@ -1,5 +1,7 @@
 import warnings
 import re
+import os
+
 import datetime as dt
 import pandas as pd
 
@@ -9,7 +11,7 @@ DATADIR = '/home/apbarret/Data/CMIP6'
 
 VARIABLE = 'siextentn'
 TABLE = 'SImon'
-EXPERIMENT = 'ssp585'
+#EXPERIMENT = 'ssp585'
 MEMBER = 'r1i1p1f1'
 
 
@@ -40,14 +42,20 @@ def make_dataframe(catalog):
     return df
 
 
-def siextentn_to_csv():
-    '''Makes a pandas DataFrame of 1D data'''
+def siextentn_to_csv(experiment):
+    '''
+    Makes a pandas DataFrame of 1D data
 
-    catalog = munge.generate_catalog(VARIABLE, TABLE, EXPERIMENT, MEMBER, datadir=DATADIR)
+    Argument
+    --------
+    :experiment: ESGF experiment_id: e.g. historical, ssp585
+    '''
+    catalog = munge.generate_catalog(VARIABLE, TABLE, experiment, MEMBER, datadir=DATADIR)
     df = make_dataframe(catalog)
     print(df.head())
 
-#df.to_csv(os.path.join(DATADIR, 'siextentn', 'SImon', 'siextentn.SImon.CMIP6.historical.csv'))
+    df.to_csv(os.path.join(DATADIR, VARIABLE, TABLE,
+                           f"{VARIABLE}.{TABLE}.CMIP6.{experiment}.csv"))
 
 if __name__ == "__main__":
-    siextentn_to_csv()
+    siextentn_to_csv('ssp585')
