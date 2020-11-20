@@ -32,7 +32,14 @@ def get_siconc(filepaths):
         print(f"time exceeds datetime limit: truncating time axis to 2100-12-31")
         ds = ds.sel(time=slice(None, '2100-12-31'))
     if 'lat' in ds.variables:
-        ds = ds.rename({'lat': 'latitude', 'lon': 'longitude'})
+        # Quick fix for BCC models
+        if "BCC-" in filepaths[0]:
+            if "latitude" in ds.variables:
+                if ds.latitude.ndim == 2:
+                    ds = ds.rename({'latitude': 'lat2D', 'longitude': 'lon2D'})
+        ds = ds.rename_vars({'lat': 'latitude', 'lon': 'longitude'})
+    if 'lat' in ds.dims:
+        ds = ds.rename_dims({'lat': 'i', 'lon': 'j'})
     if 'ni' in ds.dims:
         ds = ds.rename_dims({'ni': 'i', 'nj': 'j'})
     if 'ni' in ds.variables:
@@ -64,7 +71,14 @@ def get_areacello(filepath, verbose=False):
     if 'nav_lat' in ds.variables:
         ds = ds.rename({'nav_lat': 'latitude', 'nav_lon': 'longitude'})
     if 'lat' in ds.variables:
-        ds = ds.rename({'lat': 'latitude', 'lon': 'longitude'})
+        # Quick fix for BCC models
+        if "BCC-" in filepath:
+            if "latitude" in ds.variables:
+                if ds.latitude.ndim == 2:
+                    ds = ds.rename_vars({'latitude': 'lat2D', 'longitude': 'lon2D'})
+        ds = ds.rename_vars({'lat': 'latitude', 'lon': 'longitude'})
+    if 'lat' in ds.dims:
+        ds = ds.rename_dims({'lat': 'i', 'lon': 'j'})
     if 'x' in ds.variables:
         ds = ds.rename({'x': 'i', 'y': 'j'})
     if 'x' in ds.dims:
