@@ -9,7 +9,7 @@ import siconc
 experiment = "historical"
 ensemble = "r1i1p1f1"
 
-EXCLUDE_THESE_MODELS = ['CESM2-WACCM']
+EXCLUDE_THESE_MODELS = []  #['CESM2-WACCM']
 
 def process_one_model(model, experiment, ensemble):
     """Calculate siarean and siextentn for one model"""
