@@ -27,7 +27,14 @@ def find_siconc_files(model, experiment, ensemble):
 
 def get_siconc(filepaths):
     '''Returns xarray.Dataset for a given model run'''
-    ds = xr.open_mfdataset(filepaths, combine="by_coords", use_cftime=True, data_vars=['siconc'])
+    if 'NorESM2-LM' in filepaths[0]:
+        # Quick fix for NorESM2-LM
+        ds = xr.open_mfdataset(filepaths, combine="by_coords", use_cftime=True,
+                               data_vars=['siconc'],
+                               drop_variables=['vertices_longitude', 'vertices_latitude'])
+    else:
+        ds = xr.open_mfdataset(filepaths, combine="by_coords", use_cftime=True,
+                               data_vars=['siconc'],)
     if ds.time.dt.year.max() > 2100:
         print(f"time exceeds datetime limit: truncating time axis to 2100-12-31")
         ds = ds.sel(time=slice(None, '2100-12-31'))
