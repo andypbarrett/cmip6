@@ -10,7 +10,7 @@ def get_ensemble_stats_filepath(fp):
     return fp.with_name(new_name)
 
     
-def main(scenario, variable, experiment, verbose=True):
+def calc_smip6_ensemble_stats(scenario, variable, experiment, verbose=True):
     ensemble_filepath = load.arctic_ensemble_filepath(scenario, variable, experiment)
     ensemble_stats_filepath = get_ensemble_stats_filepath(ensemble_filepath)
 
@@ -34,5 +34,5 @@ if __name__ == "__main__":
     experiment = "r1i1p1f1"
     verbose=True
     
-    main(scenario, variable, experiment, verbose=verbose)
+    calc_smip6_ensemble_stats(scenario, variable, experiment, verbose=verbose)
     
