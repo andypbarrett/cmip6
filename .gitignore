@@ -1,2 +1,4 @@
 wget*.sh
 *.txt
+*.csv
+*.nc
