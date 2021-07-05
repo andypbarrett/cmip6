@@ -16,14 +16,16 @@ COLOR = {
     }
 
 
-def add_scenario(df, ax, label='', addline=True, fillcolor='0.6', linecolor='0.'):
+def add_scenario(df, ax, label='', addline=True, fillcolor='0.6', linecolor='k',
+                 linestyle='-'):
     """Plots polygon of mean+/-std scenario with mean line"""
     ax.fill_between(df.index, df.lower, df.upper, color=fillcolor)
     if addline:
-        ax.plot(df.index, df.mean,
+        ax.plot(df.index, df['mean'],
                 lw=3, linestyle=linestyle,
                 color=linecolor,
                 label=label)
+    return ax
 
         
 def siextentn_filled(observed, historical, ssp, ssp_names,
@@ -48,10 +50,10 @@ def siextentn_filled(observed, historical, ssp, ssp_names,
     ax.set_ylabel('10$^6$ km$^2$', fontsize=20)
     ax.tick_params(labelsize=20)
 
-    add_scenario(historical, ax,
-                 fillcolor=COLOR['HISTORICAL']['fill'],
-                 linecolor=COLOR['HISTORICAL']['line'],
-                 label='Historical')
+    ax = add_scenario(historical, ax,
+                      fillcolor=COLOR['HISTORICAL']['fill'],
+                      linecolor=COLOR['HISTORICAL']['line'],
+                      label='Historical')
     
     ax.axhline(1, color='k')
 
@@ -60,5 +62,5 @@ def siextentn_filled(observed, historical, ssp, ssp_names,
 
     plt.legend(fontsize=18, bbox_to_anchor=(0, 0.6), loc='upper left', frameon=False)
 
-    return fig
+    return fig, ax
 
