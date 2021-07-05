@@ -18,8 +18,9 @@ def main(scenario, variable, experiment, verbose=True):
     ensemble_df = load.cmip6_ensemble(scenario, experiment, variable)
     
     ensemble_stats_df = util.get_ensemble_stats(ensemble_df)
-    print(ensemble_stats_df)
-    print(ensemble_stats_filepath)
+
+    ensemble_stats_df.to_csv(ensemble_stats_filepath)
+    
     return
 
 
