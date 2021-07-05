@@ -11,6 +11,11 @@ def arctic_ensemble_filepath(scenario, variable, experiment):
     """Returns filepath for file matching scenario, experiment and variable"""
     return DATAPATH / f"cmip6_{variable}_{scenario}_{experiment}.from_siconc.csv"
 
+
+def arctic_ensemble_stats_filepath(scenario, variable, experiment):
+    """Returns filepath for statistics file matching scenario, experiment, variable"""
+    return DATAPATH / f"cmip6_{variable}_{scenario}_{experiment}_ensemble_stats.from_siconc.csv"
+
     
 def cmip6_ensemble(scenario, experiment, variable="siextentn"):
     """Loads csv file of sea ice variable ensemble into pandas dataframe
@@ -25,3 +30,19 @@ def cmip6_ensemble(scenario, experiment, variable="siextentn"):
                      index_col = "time",
                      parse_dates = True)
     return df
+
+
+def cmip6_ensemble_stats(scenario, experiment, variable='siextentn'):
+    """Loads csv file containing sea ice variable ensemble statistics
+
+    :scenario: historical, ssp370, ssp585
+    :experiment: experiment id, e.g. r1i1p1f1
+    :variable: siarean, siextentn
+
+    :returns: pandas dataframe
+    """
+    df = pd.read_csv(arctic_ensemble_stats_filepath(scenario, variable, experiment),
+                     index_col = "time",
+                     parse_dates = True)
+    return df
+
