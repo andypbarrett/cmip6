@@ -5,7 +5,7 @@ import matplotlib
 import datetime as dt
 
 import numpy as np
-
+import pandas as pd
 COLOR = {
     'HISTORICAL': {'fill': '0.6', 'line': '0.2'},
     'SSP119': {'fill': '', 'line': 'purple'},
@@ -40,6 +40,7 @@ def siextentn_filled(observed, historical, ssp, ssp_names,
     :ssp: a single pandas.Dataframe or list of pandas.Dataframes with SSP pathway dataframe
     :ssp_names: single string or list of strings containing labels for SSPs
     """
+    # Prepend last date of historical to scenarios to make plot continuous
     fig, ax = plt.subplots(figsize=figsize)
 
     ax.set_xlim(dt.datetime(1900, 1, 1), dt.datetime(2100, 12, 31))
@@ -54,6 +55,7 @@ def siextentn_filled(observed, historical, ssp, ssp_names,
                       linecolor=COLOR['HISTORICAL']['line'],
                       label='Historical')
     for scenario, name in zip(ssp, ssp_names):
+        scenario = pd.concat([historical.last('1M'), scenario])  # makes lines continous
         add_scenario(scenario, ax,
                      fillcolor=COLOR[name]['fill'],
                      linecolor=COLOR[name]['line'],
