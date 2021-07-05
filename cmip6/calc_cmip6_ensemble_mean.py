@@ -13,12 +13,16 @@ def get_ensemble_stats_filepath(fp):
 def main(scenario, variable, experiment, verbose=True):
     ensemble_filepath = load.arctic_ensemble_filepath(scenario, variable, experiment)
     ensemble_stats_filepath = get_ensemble_stats_filepath(ensemble_filepath)
+
+    if verbose: print(f"Getting ensemble statistics for {ensemble_filepath}")
     
-    if verbose: print(f"Loading {ensemble_filepath}")
+    if verbose: print(f"   loading file...")
     ensemble_df = load.cmip6_ensemble(scenario, experiment, variable)
-    
+
+    if verbose: print("   calculating ensemble statistics...")
     ensemble_stats_df = util.get_ensemble_stats(ensemble_df)
 
+    if verbose: print(f"   writing ensemble statistics to {ensemble_stats_filepath}")
     ensemble_stats_df.to_csv(ensemble_stats_filepath)
     
     return
