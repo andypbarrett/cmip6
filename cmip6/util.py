@@ -19,4 +19,6 @@ def get_ensemble_stats(df):
     :returns: pandas.DataFrame containing ensemble mean and std, and upper and lower bounds
               of ensemble.
     """
-    return df.apply(['mean', 'std', 'min', 'max', lower, upper], axis=1)
+    ens_df = df.apply(['mean', 'std', 'min', 'max', lower, upper], axis=1)
+    ens_df.index.name = df.index.name
+    return ens_df
