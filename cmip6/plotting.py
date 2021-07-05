@@ -40,15 +40,6 @@ def siextentn_filled(observed, historical, ssp, ssp_names,
     :ssp: a single pandas.Dataframe or list of pandas.Dataframes with SSP pathway dataframe
     :ssp_names: single string or list of strings containing labels for SSPs
     """
-    if not isinstance(ssp, list):
-        ssp_list = list(ssp)
-    else:
-        ssp_list = ssp
-    if not isinstance(ssp_names, list):
-        ssp_names_list = list(ssp_names)
-    else:
-        ssp_names_list = ssp_names
-    
     fig, ax = plt.subplots(figsize=figsize)
 
     ax.set_xlim(dt.datetime(1900, 1, 1), dt.datetime(2100, 12, 31))
@@ -58,11 +49,16 @@ def siextentn_filled(observed, historical, ssp, ssp_names,
     ax.set_ylabel('10$^6$ km$^2$', fontsize=20)
     ax.tick_params(labelsize=20)
 
-    ax = add_scenario(historical, ax,
+    add_scenario(historical, ax,
                       fillcolor=COLOR['HISTORICAL']['fill'],
                       linecolor=COLOR['HISTORICAL']['line'],
                       label='Historical')
-
+    for scenario, name in zip(ssp, ssp_names):
+        add_scenario(scenario, ax,
+                     fillcolor=COLOR[name]['fill'],
+                     linecolor=COLOR[name]['line'],
+                     label=name)
+    
     ax.axhline(1, color='k')
 
     ax.text(0.02, 0.04, 'Stroeve and Barrett, National Snow and Ice Data Center', fontsize=12,
