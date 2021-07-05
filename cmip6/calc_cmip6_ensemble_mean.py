@@ -5,6 +5,8 @@ import cmip6.util as util
 
 def main(scenario, variable, experiment, verbose=True):
     if verbose: print(f"Loading {load.arctic_ensemble_filepath(scenario, variable, experiment)}")
+    ensemble_df = load.cmip6_ensemble(scenario, experiment, variable)
+    print(ensemble_df)
     return
 
 
